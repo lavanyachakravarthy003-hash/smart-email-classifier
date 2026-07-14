@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Email Classifier</title>
 
     <!-- Bootstrap -->
@@ -19,46 +20,46 @@
         }
 
         .header {
-            background: linear-gradient(to right,#2563eb,#1e40af);
+            background: linear-gradient(to right, #2563eb, #1e40af);
             color: white;
             padding: 30px;
             border-radius: 15px;
-            margin-top:20px;
+            margin-top: 20px;
         }
 
-        textarea{
-            resize:none;
+        textarea {
+            resize: none;
         }
 
-        .card{
-            border:none;
-            border-radius:15px;
-            box-shadow:0 5px 15px rgba(0,0,0,.1);
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
         }
 
-        .btn-custom{
-            background:#2563eb;
-            color:white;
-            font-size:18px;
-            padding:10px 25px;
+        .btn-custom {
+            background: #2563eb;
+            color: white;
+            font-size: 18px;
+            padding: 10px 25px;
         }
 
-        .btn-custom:hover{
-            background:#1d4ed8;
-            color:white;
+        .btn-custom:hover {
+            background: #1d4ed8;
+            color: white;
         }
 
-        #result{
-            display:none;
-            font-size:22px;
-            font-weight:bold;
-            margin-top:20px;
+        #result {
+            display: none;
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
         }
 
-        .footer{
-            margin-top:50px;
-            text-align:center;
-            color:gray;
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: gray;
         }
     </style>
 
@@ -68,8 +69,8 @@
 
 <div class="container">
 
+    <!-- Header -->
     <div class="header text-center">
-
         <h1>
             <i class="fa-solid fa-envelope-circle-check"></i>
             Smart Email Classifier
@@ -78,11 +79,10 @@
         <p class="mt-3">
             AI Powered Email Spam Detection using Machine Learning
         </p>
-
     </div>
 
-
-    <div class="row mt-4">
+    <!-- Main Content -->
+    <div class="row mt-4 justify-content-center">
 
         <div class="col-lg-8">
 
@@ -106,7 +106,6 @@
                         onclick="predictEmail()">
 
                         <i class="fa-solid fa-magnifying-glass"></i>
-
                         Predict Email
 
                     </button>
@@ -130,38 +129,32 @@
 
         </div>
 
+    </div>
 
-
-
+    <!-- Footer -->
     <div class="footer">
 
         <hr>
 
         <h5>
-
             Developed by Lavanya C
-
         </h5>
 
         <p>
-
             Machine Learning Internship Project • 2026
-
         </p>
 
     </div>
 
 </div>
 
-
-
 <script>
 
-async function predictEmail(){
+async function predictEmail() {
 
-    const email=document.getElementById("emailText").value;
+    const email = document.getElementById("emailText").value;
 
-    if(email.trim()==""){
+    if (email.trim() == "") {
 
         alert("Please enter email text.");
 
@@ -169,69 +162,71 @@ async function predictEmail(){
 
     }
 
-    const button=document.querySelector(".btn-custom");
+    const button = document.querySelector(".btn-custom");
 
-    button.innerHTML="Predicting...";
+    button.innerHTML = "Predicting...";
 
-    try{
+    try {
 
-        const response=await fetch("http://127.0.0.1:5000/predict",{
+        fetch("/predict", {
 
-            method:"POST",
+            method: "POST",
 
-            headers:{
-                "Content-Type":"application/json"
+            headers: {
+                "Content-Type": "application/json"
             },
 
-            body:JSON.stringify({
-                email:email
+            body: JSON.stringify({
+                email: email
             })
 
         });
 
-        const data=await response.json();
+        const data = await response.json();
 
-        const result=document.getElementById("result");
+        const result = document.getElementById("result");
 
-        result.style.display="block";
+        result.style.display = "block";
 
-        if(data.prediction=="Spam"){
+        if (data.prediction == "Spam") {
 
-            result.className="alert alert-danger mt-4";
+            result.className = "alert alert-danger mt-4";
 
-            result.innerHTML="🚫 <b>Spam Email</b>";
+            result.innerHTML = "🚫 <b>Spam Email</b>";
 
         }
 
-        else{
+        else {
 
-            result.className="alert alert-success mt-4";
+            result.className = "alert alert-success mt-4";
 
-            result.innerHTML="✅ <b>Safe Email (Not Spam)</b>";
+            result.innerHTML = "✅ <b>Safe Email (Not Spam)</b>";
 
         }
 
     }
 
-    catch(error){
+    catch (error) {
 
-        document.getElementById("result").style.display="block";
+        const result = document.getElementById("result");
 
-        document.getElementById("result").className="alert alert-warning mt-4";
+        result.style.display = "block";
 
-        document.getElementById("result").innerHTML="Server Error!";
+        result.className = "alert alert-warning mt-4";
+
+        result.innerHTML = "⚠️ Server Error!";
 
     }
 
-    button.innerHTML='<i class="fa-solid fa-magnifying-glass"></i> Predict Email';
+    button.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Predict Email';
 
 }
 
-function clearText(){
+function clearText() {
 
-    document.getElementById("emailText").value="";
+    document.getElementById("emailText").value = "";
 
-    document.getElementById("result").style.display="none";
+    document.getElementById("result").style.display = "none";
 
 }
 
